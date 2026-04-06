@@ -30,9 +30,9 @@ body {
   font-size: 20px;
 }
 
-/* PC 메뉴: 평소에 가로로 나열 */
+/* --- [메뉴 스타일: PC 버전 (기본)] --- */
 .main-nav {
-  display: flex;
+  display: flex; /* PC에서는 가로로 나열 */
   gap: 20px;
 }
 
@@ -43,9 +43,8 @@ body {
   font-weight: 500;
 }
 
-/* 햄버거 버튼: PC에서는 숨김 */
 .menu-toggle {
-  display: none;
+  display: none; /* PC에서는 햄버거 버튼 숨김 */
   background: none;
   border: none;
   font-size: 24px;
@@ -65,7 +64,7 @@ body {
   }
 
   .menu-toggle {
-    display: block; /* 모바일에서만 버튼 보임 */
+    display: block; /* 모바일에서만 햄버거 보임 */
   }
 
   /* 모바일 메뉴: 평소에는 숨김 */
@@ -83,7 +82,7 @@ body {
     box-shadow: 0 10px 15px rgba(0,0,0,0.05);
   }
 
-  /* 메뉴 열림 클래스가 추가되면 보임 */
+  /* 햄버거 버튼 클릭해서 'open' 클래스가 추가되면 보임 */
   .main-nav.open {
     display: flex;
   }
