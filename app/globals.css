@@ -1,16 +1,6 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background-color: #ffffff; color: #333; font-family: -apple-system, sans-serif; }
 
-body {
-  background-color: #ffffff;
-  color: #333;
-  font-family: -apple-system, sans-serif;
-}
-
-/* --- [헤더 디자인] --- */
 .main-header {
   display: flex;
   justify-content: space-between;
@@ -18,86 +8,28 @@ body {
   padding: 15px 40px;
   border-bottom: 1px solid #eee;
   background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  position: sticky; top: 0; z-index: 1000;
 }
 
-.main-logo {
-  text-decoration: none;
-  font-weight: bold;
-  color: #000;
-  font-size: 20px;
-}
+.main-logo { text-decoration: none; font-weight: bold; color: #000; font-size: 20px; }
 
-/* --- [데스크톱 전용 스타일 (769px 이상)] --- */
+/* PC 전용 (769px 이상) */
 @media (min-width: 769px) {
-  .menu-toggle {
-    display: none !important; /* PC에서는 햄버거 버튼 완전 삭제 */
-  }
-
-  .main-nav {
-    display: flex !important; /* PC에서는 메뉴 항상 보임 */
-    gap: 20px;
-  }
-
-  .main-nav a {
-    font-size: 14px;
-    text-decoration: none;
-    color: #666;
-    font-weight: 500;
-  }
+  .menu-toggle { display: none !important; }
+  .main-nav { display: flex !important; gap: 20px; }
+  .main-nav a { font-size: 14px; text-decoration: none; color: #666; font-weight: 500; }
 }
 
-/* --- [모바일 전용 스타일 (768px 이하)] --- */
+/* 모바일 전용 (768px 이하) */
 @media (max-width: 768px) {
-  .main-header {
-    padding: 15px 20px;
-  }
-
-  .menu-toggle {
-    display: block; /* 모바일에서만 햄버거 보임 */
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
+  .menu-toggle { display: block !important; background: none; border: none; font-size: 24px; cursor: pointer; }
   .main-nav {
-    display: none; /* 기본적으로 숨김 */
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    flex-direction: column;
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-    gap: 15px;
-    box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+    display: none; position: absolute; top: 60px; left: 0; width: 100%;
+    background: #fff; flex-direction: column; padding: 20px; gap: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
-
-  /* 햄버거 버튼 클릭 시 클래스가 추가되면 보임 */
-  .main-nav.open {
-    display: flex;
-  }
-
-  .main-nav a {
-    font-size: 16px;
-    text-decoration: none;
-    color: #333;
-    padding: 5px 0;
-  }
+  .main-nav.open { display: flex !important; }
 }
 
-.main-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-img, video {
-  max-width: 100% !important;
-  height: auto !important;
-  border-radius: 12px;
-}
+.main-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+img, video { max-width: 100% !important; height: auto !important; border-radius: 12px; }
