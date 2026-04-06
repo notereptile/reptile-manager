@@ -14,12 +14,18 @@ export default function ReptileDetailPage() {
   const [reptile, setReptile] = useState<any>(null);
   const [weightLogs, setWeightLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isLiking, setIsLiking] = useState(false);
 
   useEffect(() => {
     const fetchAllData = async () => {
       if (!id) return;
       try {
-        // 1. 개체 정보 조회
+        // 1. 조회수(views) 1 증가시키기 (RPC 함수 사용 권장되나 없으면 직접 업데이트)
+        await supabase.rpc('increment_views', { row_id: Number(id) }) 
+        // 만약 위 RPC가 안된다면 아래 주석 해제하여 직접 업데이트 사용:
+        // await supabase.from('reptiles').update({ views: (reptile?.views || 0) + 1 }).eq('id', Number(id));
+
+        // 2. 개체 정보 조회
         const { data: reptileData, error: rError } = await supabase
           .from('reptiles')
           .select('*')
@@ -28,7 +34,7 @@ export default function ReptileDetailPage() {
 
         if (rError) throw rError;
 
-        // 2. 작성자 프로필 별도 조회
+        // 3. 작성자 프로필 별도 조회
         let profile = null;
         if (reptileData.user_id) {
           const { data: pData } = await supabase
@@ -39,7 +45,7 @@ export default function ReptileDetailPage() {
           profile = pData;
         }
 
-        // 3. 몸무게 기록 조회
+        // 4. 몸무게 기록 조회
         const { data: weights } = await supabase
           .from('weight_logs')
           .select('*')
@@ -58,6 +64,28 @@ export default function ReptileDetailPage() {
     fetchAllData();
   }, [id]);
 
+  // 좋아요 버튼 클릭 함수
+  const handleLike = async () => {
+    if (isLiking || !reptile) return;
+    setIsLiking(true);
+    try {
+      const { data, error } = await supabase
+        .from('reptiles')
+        .update({ likes: (reptile.likes || 0) + 1 })
+        .eq('id', Number(id))
+        .select()
+        .single();
+
+      if (!error) {
+        setReptile({ ...reptile, likes: data.likes });
+      }
+    } catch (err) {
+      console.error("좋아요 실패:", err);
+    } finally {
+      setIsLiking(false);
+    }
+  };
+
   if (loading) return <div className="p-20 text-center font-black italic text-green-700 animate-pulse">LOADING SYSTEM...</div>;
   if (!reptile) return <div className="p-20 text-center font-black">개체 정보를 가져올 수 없습니다.</div>;
 
@@ -69,9 +97,16 @@ export default function ReptileDetailPage() {
           ← Back
         </button>
         
-        <div className="flex flex-col items-center gap-2 bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-          <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : ''} size={64} />
-          <span className="text-[8px] font-black text-gray-400 uppercase">ID TAG QR</span>
+        <div className="flex items-center gap-6">
+           {/* 조회수 표시 */}
+           <div className="text-right">
+              <p className="text-[8px] font-black text-gray-400 uppercase">Views</p>
+              <p className="text-lg font-black italic">{reptile.views || 0}</p>
+           </div>
+           <div className="flex flex-col items-center gap-2 bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
+             <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : ''} size={64} />
+             <span className="text-[8px] font-black text-gray-400 uppercase">ID TAG QR</span>
+           </div>
         </div>
       </div>
 
@@ -149,7 +184,7 @@ export default function ReptileDetailPage() {
             </div>
           </div>
 
-          {/* 하단 작성자 카드 */}
+          {/* 하단 작성자 카드 + 좋아요 */}
           <div className="flex items-center justify-between bg-black text-white p-6 rounded-[30px] shadow-xl">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-gray-800 overflow-hidden">
@@ -160,9 +195,22 @@ export default function ReptileDetailPage() {
                 <span className="text-sm font-black italic">{reptile.profiles?.display_name || "Anonymous"}</span>
               </div>
             </div>
-            <div className="text-right">
-              <span className="text-[8px] font-black text-gray-500 uppercase block">Registered At</span>
-              <span className="text-[10px] font-bold italic">{new Date(reptile.created_at).toLocaleDateString()}</span>
+            
+            <div className="flex items-center gap-6">
+              {/* 좋아요 버튼 */}
+              <button 
+                onClick={handleLike}
+                disabled={isLiking}
+                className="flex flex-col items-center group transition-transform active:scale-90"
+              >
+                <span className="text-2xl group-hover:scale-110 transition-transform">❤️</span>
+                <span className="text-[10px] font-black italic">{reptile.likes || 0}</span>
+              </button>
+
+              <div className="text-right border-l border-gray-800 pl-6">
+                <span className="text-[8px] font-black text-gray-500 uppercase block">Registered At</span>
+                <span className="text-[10px] font-bold italic">{new Date(reptile.created_at).toLocaleDateString()}</span>
+              </div>
             </div>
           </div>
         </div>
