@@ -1,26 +1,101 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  font-family: -apple-system, sans-serif;
+}
+
+/* --- [헤더 디자인] --- */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.main-logo {
+  text-decoration: none;
+  font-weight: bold;
+  color: #000;
+  font-size: 20px;
+}
+
+/* PC 메뉴: 평소에 가로로 나열 */
+.main-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.main-nav a {
+  font-size: 14px;
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 햄버거 버튼: PC에서는 숨김 */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* --- [📱 모바일 최적화 (768px 이하)] --- */
+@media (max-width: 768px) {
+  .main-header {
+    padding: 15px 20px;
+  }
+
+  .menu-toggle {
+    display: block; /* 모바일에서만 버튼 보임 */
+  }
+
+  /* 모바일 메뉴: 평소에는 숨김 */
+  .main-nav {
+    display: none; 
+    position: absolute;
+    top: 100%; /* 헤더 바로 아래 */
+    left: 0;
+    width: 100%;
+    background: #fff;
+    flex-direction: column;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    gap: 15px;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+  }
+
+  /* 메뉴 열림 클래스가 추가되면 보임 */
+  .main-nav.open {
+    display: flex;
+  }
+
+  h1 {
+    font-size: 1.8rem !important;
+  }
+}
+
+/* 이미지 반응형 */
+img, video {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 12px;
 }
